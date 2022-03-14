@@ -24,9 +24,9 @@ def start(message):
 
 @bot.message_handler(commands=['shit'])
 def shit(message):
-    bot.send_message(message.chat.id, db_reader())
+    bot.send_message(message.chat.id, db_reader()[0][0])
 
-    
+
 @bot.message_handler(commands=['check'])
 def check(message):
     if message.chat.type == "private":
