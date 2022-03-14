@@ -101,8 +101,7 @@ def adder(user_id):
         except:
             i = -1
     df2 = pd.DataFrame({'0': [user_id], '1': [0]})
-    file = pd.concat([file, df2], ignore_index=True, axis=0)
-    file = file[[0,1]]
+    file .append(df2, ignore_index=True)
     db_replace(file)
 
 
