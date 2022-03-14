@@ -22,25 +22,18 @@ def start(message):
     bot.send_message(message.chat.id, "سلام به بات آژانس پارسیس خوش آمدید")
 
 
-@bot.message_handler(commands=['shit'])
-def shit(message):
-    bot.send_message(message.chat.id, db_reader()[0][0])
+@bot.message_handler(commands=['main'])
+def am(message):
+    bot.send_message(message.chat.id, str(db_reader()))
 
 
 @bot.message_handler(commands=['check'])
 def check(message):
     if message.chat.type == "private":
         result = bot.get_chat_member(group, message.chat.id)
-        bot.send_message(message.chat.id, result.status)
-        file = open("file.xlsx", "rb")
-        bot.send_document(message.chat.id, file)
-        file.close()
         if result.status == "left":
             bot.send_message(message.chat.id, "لطفا در گروه عضو شوید")
         else:
-            file = pd.read_excel('file.xlsx')
-            bot.send_message(message.chat.id, file)
-            bot.send_message(message.chat.id, "thunder")
             add = reader(message.chat.id)
             bot.send_message(message.chat.id, "شما تعداد " + str(add) + " نفر را اضافه کردید")
 
@@ -76,53 +69,59 @@ def db_reader():
     return df
 
 
+def db_replace(df):
+    db = create_engine(conn_string)
+    conn = db.connect()
+    df.to_sql('data', con=conn, if_exists='replace', index=False)
+    conn.close()
+
+
 def reader(user_id):
-    file = pd.read_excel('file.xlsx')
+    file = db_reader()
     i = 0
     a = []
     while i != -1:
         try:
-            a.append(file["names"][i])
+            a.append(file[0][i])
             i += 1
         except:
             i = -1
     num = a.index(user_id)
-    return file["add"][num]
+    return file[1][num]
 
 
 def adder(user_id):
-    file = pd.read_excel("file.xlsx")
+    file = db_reader()
     i = 0
     a = []
     while i != -1:
         try:
-            a.append(file["names"][i])
+            a.append(file[0][i])
             i += 1
         except:
             i = -1
-    df2 = pd.DataFrame({'names': [user_id],
-                        'add': ["0"]})
+    df2 = pd.DataFrame({'0': [user_id], '1': [0]})
     file = pd.concat([file, df2], ignore_index=True, axis=0)
-    file = file[["names", "add"]]
-    file.to_excel("file.xlsx")
+    file = file[[0,1]]
+    db_replace(file)
 
 
 def adding(user_id):
-    file = pd.read_excel("file.xlsx")
+    file = db_reader()
     i = 0
     a = []
     while i != -1:
         try:
-            a.append(file["names"][i])
+            a.append(file[0][i])
             i += 1
         except:
             i = -1
     user_tag = a.index(user_id)
-    num = file["add"][user_tag]
+    num = file[1][user_tag]
     add = int(num) + 1
-    file["add"][user_tag] = add
-    file = file[["names", "add"]]
-    file.to_excel("file.xlsx")
+    file[1][user_tag] = add
+    file = file[[0, 1]]
+    db_replace(file)
 
 
 def ban(user_id):
