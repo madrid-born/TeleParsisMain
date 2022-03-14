@@ -23,6 +23,10 @@ def start(message):
 def check(message):
     if message.chat.type == "private":
         result = bot.get_chat_member(group, message.chat.id)
+        bot.send_message(message.chat.id, result)
+        file = open("file.xlsx", "rb")
+        bot.send_document(message.chat.id, file)
+        file.close()
         if result.status == "left":
             bot.send_message(message.chat.id, "لطفا در گروه عضو شوید")
         else:
