@@ -2,8 +2,11 @@ import telebot
 from flask import Flask, request
 import pandas as pd
 import os
+import psycopg2
+from sqlalchemy import create_engine
 
 API_KEY = '5131929422:AAGZhRuzw-FEiMtEyLmVCaGd0Tz1eGCZDrM'
+conn_string = 'postgresql://rouzfxqtgpxzvf:7186fe89ce7cf7a0268fac5955dae9b8a612b61daa7167d91d6651cfebf0e97a@ec2-3-209-61-239.compute-1.amazonaws.com:5432/d4bfe3vvb81eoe'
 bot = telebot.TeleBot(API_KEY)
 server = Flask(__name__)
 
@@ -19,6 +22,11 @@ def start(message):
     bot.send_message(message.chat.id, "سلام به بات آژانس پارسیس خوش آمدید")
 
 
+@bot.message_handler(commands=['shit'])
+def shit(message):
+    bot.send_message(message.chat.id, db_reader())
+
+    
 @bot.message_handler(commands=['check'])
 def check(message):
     if message.chat.type == "private":
@@ -55,6 +63,17 @@ def police(message):
     for word in string.split():
         if word in Swears:
             ban(message.chat.id)
+
+
+def db_reader():
+    conn = psycopg2.connect(conn_string)
+    conn.autocommit = True
+    cursor = conn.cursor()
+    sql1 = '''select * from data;'''
+    cursor.execute(sql1)
+    df = pd.DataFrame(cursor.fetchall())
+    conn.close()
+    return df
 
 
 def reader(user_id):
