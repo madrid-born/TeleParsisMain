@@ -31,7 +31,7 @@ def check(message):
             bot.send_message(message.chat.id, "لطفا در گروه عضو شوید")
         else:
             file = pd.read_excel('file.xlsx')
-            bot.send_message(message.chat.id, file["add"][0])
+            bot.send_message(message.chat.id, file)
             bot.send_message(message.chat.id, "thunder")
             add = reader(message.chat.id)
             bot.send_message(message.chat.id, "شما تعداد " + str(add) + " نفر را اضافه کردید")
