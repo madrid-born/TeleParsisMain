@@ -23,13 +23,14 @@ def start(message):
 def check(message):
     if message.chat.type == "private":
         result = bot.get_chat_member(group, message.chat.id)
-        bot.send_message(message.chat.id, result)
+        bot.send_message(message.chat.id, result.status)
         file = open("file.xlsx", "rb")
         bot.send_document(message.chat.id, file)
         file.close()
         if result.status == "left":
             bot.send_message(message.chat.id, "لطفا در گروه عضو شوید")
         else:
+            bot.send_message(message.chat.id, "thunder")
             add = reader(message.chat.id)
             bot.send_message(message.chat.id, "شما تعداد " + str(add) + " نفر را اضافه کردید")
 
