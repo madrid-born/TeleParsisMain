@@ -19,7 +19,9 @@ Swears = []
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "سلام به بات آژانس پارسیس خوش آمدید")
+    bot.send_message(message.chat.id, "با سلام به بات آژانس مسافرتی پارسیس خوش آمدید\n\nبرای اتصال به بخش فروش روی "
+                                      "گزینه /tour کلیک کنید\n و برای اطلاع از تعداد افراد اضافه شده توسط شما بر روی "
+                                      "/check کلیک کنید")
 
 
 @bot.message_handler(commands=['main'])
@@ -137,7 +139,7 @@ def tour(message):
     keyboard.add(telebot.types.InlineKeyboardButton("تور خارجی", url='t.me/omidhappy'))
     keyboard.add(telebot.types.InlineKeyboardButton("تور داخلی", url='t.me/omidhappy'))
     keyboard.add(telebot.types.InlineKeyboardButton("تور کیش", url='t.me/omidhappy'))
-    bot.send_message(message.chat.id, "برای برقراری ارتباط با ادمین ربات روی گزینه پشتیبانی کلیک کنید",
+    bot.send_message(message.chat.id, "برای خرید تور و بلیط بر روی دکمه موردنظر خود کلیک کنید",
                      reply_markup=keyboard)
 
 
@@ -149,7 +151,7 @@ def delete(message):
     bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
 
 
-@server.route('/'+ API_KEY, methods=['POST'])
+@server.route('/' + API_KEY, methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
