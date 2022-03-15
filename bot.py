@@ -134,9 +134,9 @@ def adding(user_id):
 
 def tour(message):
     keyboard = telebot.types.InlineKeyboardMarkup()
-    keyboard.add(telebot.types.InlineKeyboardButton("تور خارجی", url='t.me/madrid_born'))
-    keyboard.add(telebot.types.InlineKeyboardButton("تور داخلی", url='t.me/madrid_born'))
-    keyboard.add(telebot.types.InlineKeyboardButton("تور کیش", url='t.me/madrid_born'))
+    keyboard.add(telebot.types.InlineKeyboardButton("تور خارجی", url='t.me/omidhappy'))
+    keyboard.add(telebot.types.InlineKeyboardButton("تور داخلی", url='t.me/omidhappy'))
+    keyboard.add(telebot.types.InlineKeyboardButton("تور کیش", url='t.me/omidhappy'))
     bot.send_message(message.chat.id, "برای برقراری ارتباط با ادمین ربات روی گزینه پشتیبانی کلیک کنید",
                      reply_markup=keyboard)
 
