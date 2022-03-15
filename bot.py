@@ -46,7 +46,7 @@ def new_participant(message):
     delete(message)
 
 
-@bot.message_handler(content_types='tour')
+@bot.message_handler(commands='tour')
 def new_tour(message):
     tour(message)
 
