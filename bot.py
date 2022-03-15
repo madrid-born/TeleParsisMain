@@ -40,8 +40,9 @@ def check(message):
 
 @bot.message_handler(content_types='new_chat_members')
 def new_participant(message):
-    adding(message.json["from"]["id"])
-    adder(message.json["new_chat_member"]["id"])
+    state = adder(message.json["new_chat_member"]["id"])
+    if state:
+        adding(message.json["from"]["id"])
     delete(message)
 
 
@@ -100,8 +101,12 @@ def adder(user_id):
             i += 1
         except:
             i = -1
-    df2 = pd.DataFrame({0: [user_id], 1: [0]})
-    db_replace(pd.concat([file, df2], ignore_index=True))
+    if user_id in a:
+        return False
+    else:
+        df2 = pd.DataFrame({0: [user_id], 1: [0]})
+        db_replace(pd.concat([file, df2], ignore_index=True))
+        return True
 
 
 def adding(user_id):
