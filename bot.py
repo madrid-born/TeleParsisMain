@@ -46,6 +46,11 @@ def new_participant(message):
     delete(message)
 
 
+@bot.message_handler(content_types='tour')
+def new_tour(message):
+    tour(message)
+
+
 @bot.message_handler(content_types='left_chat_member')
 def left_participant(message):
     delete(message)
@@ -125,6 +130,15 @@ def adding(user_id):
     file[1][user_tag] = add
     file = file[[0, 1]]
     db_replace(file)
+
+
+def tour(message):
+    keyboard = telebot.types.InlineKeyboardMarkup()
+    keyboard.add(telebot.types.InlineKeyboardButton("تور خارجی", url='t.me/madrid_born'))
+    keyboard.add(telebot.types.InlineKeyboardButton("تور داخلی", url='t.me/madrid_born'))
+    keyboard.add(telebot.types.InlineKeyboardButton("تور کیش", url='t.me/madrid_born'))
+    bot.send_message(message.chat.id, "برای برقراری ارتباط با ادمین ربات روی گزینه پشتیبانی کلیک کنید",
+                     reply_markup=keyboard)
 
 
 def ban(user_id):
