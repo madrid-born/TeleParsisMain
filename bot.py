@@ -10,8 +10,7 @@ conn_string = 'postgresql://rouzfxqtgpxzvf:7186fe89ce7cf7a0268fac5955dae9b8a612b
 bot = telebot.TeleBot(API_KEY)
 server = Flask(__name__)
 
-channel = -1001600009203
-group = -1001712280383
+group = -1001313147690
 MB = 315703198
 
 Swears = []
@@ -42,10 +41,23 @@ def check(message):
 
 @bot.message_handler(content_types='new_chat_members')
 def new_participant(message):
-    state = adder(message.json["new_chat_member"]["id"])
-    if state:
+    state1 = search(message.json["new_chat_member"]["id"])
+    state2 = search(message.json["from"]["id"])
+    if state1:
+        adder(message.json["new_chat_member"]["id"])
+    if state2:
+        adder(message.json["from"]["id"])
+    if state1:
         adding(message.json["from"]["id"])
     delete(message)
+
+
+@bot.message_handler(commands='ban')
+def banning(message):
+    try:
+        bot.restrict_chat_member(message.chat.id, message.reply_to_message.json["from"]["id"], 86400)
+    except:
+        pass
 
 
 @bot.message_handler(commands='tour')
@@ -98,7 +110,7 @@ def reader(user_id):
     return file[1][num]
 
 
-def adder(user_id):
+def search(user_id):
     file = db_reader()
     i = 0
     a = []
@@ -111,9 +123,13 @@ def adder(user_id):
     if user_id in a:
         return False
     else:
-        df2 = pd.DataFrame({0: [user_id], 1: [0]})
-        db_replace(pd.concat([file, df2], ignore_index=True))
         return True
+
+
+def adder(user_id):
+    file = db_reader()
+    df2 = pd.DataFrame({0: [user_id], 1: [0]})
+    db_replace(pd.concat([file, df2], ignore_index=True))
 
 
 def adding(user_id):
